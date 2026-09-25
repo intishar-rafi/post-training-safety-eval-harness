@@ -1,14 +1,14 @@
 # Post-Training Safety Eval Harness
 
-A numpy-only evaluation pipeline for the checks a lab runs **after** training a model — not another trainer. It turns raw generations and training metadata into a structured model card and a final **ship / report / pause** release decision.
+A numpy only evaluation pipeline for the checks a lab runs **after** training a model — not another trainer. It turns raw generations and training metadata into a structured model card and a final **ship / report / pause** release decision.
 
-This mirrors the kind of harness a lab's safety team runs before a release gate — implemented end to end, every metric hand-written: calibration error, sycophancy rate, contamination detection, fairness gaps, compute-band estimation, and capability gating, all combined into one deterministic release decision.
+This mirrors the kind of harness a lab's safety team runs before a release gate, implemented end to end, every metric hand-written: calibration error, sycophancy rate, contamination detection, fairness gaps, compute-band estimation, and capability gating, all combined into one deterministic release decision.
 
 No frameworks, no external deps beyond `numpy`. Every function is pure and testable in isolation.
 
 ## How it fits together
 
-This isn't a set of standalone functions — it's a pipeline. Raw generations and training metadata go in one end, and a single ship/report/pause verdict comes out the other, with every stage's output feeding the next.
+Raw generations and training metadata go in one end, and a single ship/report/pause verdict comes out the other, with every stage's output feeding the next.
 
 ```mermaid
 flowchart TD
@@ -34,15 +34,15 @@ Two things happen in parallel and then merge: the **safety metrics** (calibratio
 
 ## What it evaluates
 
-| Check | Function | What it catches |
-|---|---|---|
-| Calibration | `binary_expected_calibration_error` | Is model confidence trustworthy, or is it over/under-confident? |
-| Sycophancy | `sycophancy_rate` | Does the model flip its answer to agree with an assertive but wrong user? |
-| Contamination | `exact_match_contamination_rate`, `max_ngram_overlap` | Did eval data leak into training data? |
-| Fairness | `demographic_parity_gap`, `equalized_odds_gap` | Does the model treat groups unequally? |
-| Compute | `transformer_training_flops`, `log10_compute`, `count_log10_thresholds_met` | What training-compute regulatory/policy band does this model fall into? |
-| Capability gating | `flagged_eval_names`, `capability_gate` | Did the model exceed published capability limits on any benchmark? |
-| Release decision | `assemble_model_card`, `release_decision` | Final ship/report/pause verdict combining everything above |
+| Check             | Function                                                                    | What it catches                                                           |
+| ----------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| Calibration       | `binary_expected_calibration_error`                                         | Is model confidence trustworthy, or is it over/under-confident?           |
+| Sycophancy        | `sycophancy_rate`                                                           | Does the model flip its answer to agree with an assertive but wrong user? |
+| Contamination     | `exact_match_contamination_rate`, `max_ngram_overlap`                       | Did eval data leak into training data?                                    |
+| Fairness          | `demographic_parity_gap`, `equalized_odds_gap`                              | Does the model treat groups unequally?                                    |
+| Compute           | `transformer_training_flops`, `log10_compute`, `count_log10_thresholds_met` | What training-compute regulatory/policy band does this model fall into?   |
+| Capability gating | `flagged_eval_names`, `capability_gate`                                     | Did the model exceed published capability limits on any benchmark?        |
+| Release decision  | `assemble_model_card`, `release_decision`                                   | Final ship/report/pause verdict combining everything above                |
 
 ## Demo
 
@@ -78,7 +78,7 @@ Even though the capability gate alone says `report`, the release decision escala
 - **`flops / log10 / band 1`** — estimated training compute lands in the second-lowest scrutiny tier.
 - **`flagged ['mmlu']`** — the model's MMLU score crossed its published capability limit.
 - **`gate report`** — compute band + one flagged eval requires a safety report, but not an automatic pause.
-- **`release pause`** — the *final* verdict overrides the gate: raw metric thresholds (ECE, equalized odds) are breached, so the harness pauses release regardless of what the capability gate alone decided. Either check failing is enough to block.
+- **`release pause`** — the _final_ verdict overrides the gate: raw metric thresholds (ECE, equalized odds) are breached, so the harness pauses release regardless of what the capability gate alone decided. Either check failing is enough to block.
 
 ## Project structure
 
