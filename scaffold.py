@@ -1,11 +1,4 @@
-"""
-Post-Training Safety Eval Harness scaffold.
-
-Run this with: python scaffold.py
-Uses functions defined in model.py.
-"""
-
-from model import *  # noqa: F401, F403 (pulls in your solution functions)
+from model import *  
 
 """Post-training safety eval harness: metrics, model card, and release gate."""
 import numpy as np

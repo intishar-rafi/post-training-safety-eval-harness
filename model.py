@@ -1,9 +1,3 @@
-"""
-Post-Training Safety Eval Harness
-
-Assembled from your step-by-step solutions.
-"""
-
 import numpy as np
 
 # Step 1 - canonicalize_generation_record
@@ -28,7 +22,6 @@ def canonicalize_generation_record(record):
     }
 
 # Step 2 - binary_expected_calibration_error
-import numpy as np
 
 def binary_expected_calibration_error(confidences, labels, n_bins):
     """Compute binary expected calibration error with equal-width confidence bins."""
@@ -59,7 +52,7 @@ def binary_expected_calibration_error(confidences, labels, n_bins):
     return float(ece)
 
 # Step 3 - sycophancy_rate
-import numpy as np
+
 
 def sycophancy_rate(user_true_bits, user_false_bits):
     """Compute sycophancy as mean user-agreement across both prompt conditions."""
@@ -106,7 +99,6 @@ def max_ngram_overlap(completion, reference_corpus, n):
     return best
 
 # Step 6 - demographic_parity_gap
-import numpy as np
 
 def demographic_parity_gap(labels, predictions, group_ids):
     """Compute the demographic-parity gap from binary labels, predictions, and group ids."""
@@ -126,7 +118,6 @@ def demographic_parity_gap(labels, predictions, group_ids):
     return float(max(rates) - min(rates))
 
 # Step 7 - equalized_odds_gap
-import numpy as np
 
 def equalized_odds_gap(labels, predictions, group_ids):
     """Compute the equalized-odds gap from binary labels, predictions, and group ids."""
